@@ -93,6 +93,31 @@ The high-level architecture is documented in `docs/diagrams/system-architecture.
 - Google Maps API and Places SDK are used for venue search, map display, and directions.
 - Production and staging share the same overall architecture but use separate deployment environments.
 
+### Mermaid: System Architecture
+
+```mermaid
+flowchart LR
+    Guest["Guest User"] --> Browser["Web Browser"]
+    Organizer["Organizer"] --> Browser
+
+    Browser --> Vercel["Vercel / Next.js Web App"]
+    Vercel --> Auth["Supabase Auth"]
+    Vercel --> DB["Supabase Postgres"]
+    Vercel --> Storage["Supabase Storage"]
+    Vercel --> Maps["Google Maps API and Places SDK"]
+
+    Auth --> DB
+    DB --> RLS["Row Level Security Policies"]
+
+    subgraph Environments
+      Prod["Production: rizi.app"]
+      Stage["Staging: staging.rizi.app"]
+    end
+
+    Prod -. deploy .-> Vercel
+    Stage -. validate .-> Vercel
+```
+
 ## 6. Components and Classes
 
 The class and component relationships are documented in `docs/diagrams/class-diagram.mmd`.
@@ -130,6 +155,142 @@ The class and component relationships are documented in `docs/diagrams/class-dia
   - Responsibilities: mark guests as checked in and prevent duplicate check-in actions.
   - Key methods: `checkInGuest()`, `getAttendanceStatus()`.
 
+### Mermaid: Class and Component Diagram
+
+```mermaid
+classDiagram
+    class AuthUI {
+        +renderLoginForm()
+        +renderRegisterForm()
+        +submitCredentials()
+    }
+
+    class EventManagementUI {
+        +renderEventForm()
+        +saveDraft()
+        +publishEvent()
+        +viewGuestList()
+    }
+
+    class PublicEventPage {
+        +loadEventBySlug()
+        +renderEventDetails()
+        +showVenueDirections()
+    }
+
+    class GuestRegistrationUI {
+        +renderRegistrationForm()
+        +submitRegistration()
+        +showConfirmation()
+    }
+
+    class GuestListUI {
+        +renderGuestList()
+        +filterGuests()
+        +openCheckInScreen()
+    }
+
+    class OfflineCheckInUI {
+        +searchGuest()
+        +confirmCheckIn()
+        +showAttendanceStatus()
+    }
+
+    class AuthService {
+        +registerOrganizer()
+        +loginOrganizer()
+        +getCurrentOrganizer()
+    }
+
+    class EventService {
+        +createEvent()
+        +updateEvent()
+        +publishEvent()
+        +getPublicEventBySlug()
+    }
+
+    class GuestService {
+        +registerGuest()
+        +listGuestsByEvent()
+        +getGuestById()
+    }
+
+    class VenueLocationService {
+        +saveVenueLocation()
+        +buildDirectionsUrl()
+        +mapPlaceToVenueFields()
+    }
+
+    class CheckInService {
+        +checkInGuest()
+        +getAttendanceStatus()
+        +preventDuplicateCheckIn()
+    }
+
+    class User {
+        +uuid id
+        +string email
+        +string name
+        +string role
+    }
+
+    class Event {
+        +uuid id
+        +uuid organizerId
+        +string slug
+        +string title
+        +string status
+        +int capacity
+        +string placeId
+        +float latitude
+        +float longitude
+    }
+
+    class Guest {
+        +uuid id
+        +uuid eventId
+        +string fullName
+        +string email
+        +string phone
+        +string tier
+        +string status
+        +datetime checkedInAt
+    }
+
+    class AgendaItem {
+        +uuid id
+        +uuid eventId
+        +uuid speakerId
+        +string title
+        +datetime startTime
+        +datetime endTime
+    }
+
+    class Speaker {
+        +uuid id
+        +uuid eventId
+        +string fullName
+        +string jobTitle
+        +string bio
+    }
+
+    AuthUI --> AuthService : uses
+    EventManagementUI --> EventService : uses
+    EventManagementUI --> GuestService : reads guests
+    PublicEventPage --> EventService : loads event
+    PublicEventPage --> VenueLocationService : gets map data
+    GuestRegistrationUI --> GuestService : registers guest
+    GuestListUI --> GuestService : lists guests
+    OfflineCheckInUI --> CheckInService : checks in guest
+    CheckInService --> GuestService : reads guest
+
+    User "1" --> "many" Event : creates
+    Event "1" --> "many" Guest : contains
+    Event "1" --> "many" AgendaItem : schedules
+    Event "1" --> "many" Speaker : features
+    Speaker "0..1" --> "many" AgendaItem : presents
+```
+
 ## 7. Database Design
 
 The ER diagram is documented in `docs/diagrams/database-er.mmd`.
@@ -155,6 +316,75 @@ The ER diagram is documented in `docs/diagrams/database-er.mmd`.
 - Venue location data may include `place_id`, `address`, `latitude`, and `longitude`.
 - Guests are treated as free-tier participants by default.
 
+### Mermaid: Database ER Diagram
+
+```mermaid
+erDiagram
+    USERS ||--o{ EVENTS : creates
+    EVENTS ||--o{ GUESTS : registers
+    EVENTS ||--o{ AGENDA_ITEMS : includes
+    EVENTS ||--o{ SPEAKERS : features
+    SPEAKERS o|--o{ AGENDA_ITEMS : may_present
+
+    USERS {
+        uuid id PK
+        string email
+        string name
+        string role
+        datetime created_at
+    }
+
+    EVENTS {
+        uuid id PK
+        uuid organizer_id FK
+        string slug
+        string title
+        string status
+        datetime start_date
+        datetime end_date
+        string venue_name
+        string venue_address
+        string city
+        string place_id
+        float latitude
+        float longitude
+        int capacity
+        json brand_config
+        datetime created_at
+    }
+
+    GUESTS {
+        uuid id PK
+        uuid event_id FK
+        string full_name
+        string email
+        string phone
+        string tier
+        string status
+        datetime checked_in_at
+        datetime created_at
+    }
+
+    AGENDA_ITEMS {
+        uuid id PK
+        uuid event_id FK
+        uuid speaker_id FK
+        string title
+        string item_type
+        datetime start_time
+        datetime end_time
+        string location_name
+    }
+
+    SPEAKERS {
+        uuid id PK
+        uuid event_id FK
+        string full_name
+        string job_title
+        string bio
+    }
+```
+
 ## 8. Sequence Diagrams
 
 The key interaction diagrams are stored in:
@@ -168,6 +398,75 @@ The key interaction diagrams are stored in:
 - Organizer creates and publishes an event.
 - Guest opens the event page and registers.
 - Organizer performs offline/manual check-in.
+
+### Mermaid: Create and Publish Event
+
+```mermaid
+sequenceDiagram
+    actor Organizer
+    participant UI as Next.js Web App
+    participant Auth as Supabase Auth
+    participant API as EventService
+    participant DB as Supabase Postgres
+
+    Organizer->>UI: Sign in with email and password
+    UI->>Auth: Authenticate organizer
+    Auth-->>UI: Session returned
+    Organizer->>UI: Submit create event form
+    UI->>API: POST /api/events
+    API->>DB: Insert draft event and generated slug
+    DB-->>API: Event created
+    API-->>UI: Draft event response
+    Organizer->>UI: Publish event
+    UI->>API: POST /api/events/{eventId}/publish
+    API->>DB: Update event status to published
+    DB-->>API: Published event
+    API-->>UI: Public URL returned
+```
+
+### Mermaid: Guest Registration
+
+```mermaid
+sequenceDiagram
+    actor Guest
+    participant UI as Public Event Page
+    participant API as GuestService
+    participant DB as Supabase Postgres
+
+    Guest->>UI: Open /e/{slug}
+    UI->>API: GET /api/public/events/{slug}
+    API->>DB: Read published event by slug
+    DB-->>API: Event details
+    API-->>UI: Event page payload
+    Guest->>UI: Submit registration form
+    UI->>API: POST /api/guests/register
+    API->>DB: Validate event and create guest
+    DB-->>API: Guest record created
+    API-->>UI: Registration success response
+    UI-->>Guest: Confirmation shown
+```
+
+### Mermaid: Offline Check-in
+
+```mermaid
+sequenceDiagram
+    actor Organizer
+    participant UI as Check-in Screen
+    participant API as CheckInService
+    participant DB as Supabase Postgres
+
+    Organizer->>UI: Open event guest list or check-in screen
+    UI->>API: GET /api/events/{eventId}/guests
+    API->>DB: Fetch registered guests
+    DB-->>API: Guest list
+    API-->>UI: Guest list response
+    Organizer->>UI: Select guest and confirm check-in
+    UI->>API: POST /api/guests/{guestId}/checkin
+    API->>DB: Update guest status and checked_in_at
+    DB-->>API: Updated guest
+    API-->>UI: Check-in success response
+    UI-->>Organizer: Attendance updated
+```
 
 ## 9. API Specifications
 

@@ -93,3 +93,7 @@ All guests are treated as free-tier users in this MVP. No billing or payment log
 - SCM and QA plan: [docs/scm-qa-plan.md](docs/scm-qa-plan.md)
 - Technical justifications: [docs/technical-justifications.md](docs/technical-justifications.md)
 - Submission file: [deliverables/RiziEvents-Technical-Documentation.docx](deliverables/RiziEvents-Technical-Documentation.docx)
+
+## Diagram Rendering Note
+
+The Mermaid diagrams are stored both as standalone `.mmd` source files in `docs/diagrams/` and embedded directly inside [docs/technical-documentation.md](docs/technical-documentation.md) so they render on GitHub.
