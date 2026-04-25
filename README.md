@@ -63,8 +63,6 @@ The MVP positions Rizi as a lightweight event publishing and guest registration 
 │       └── sequence-offline-checkin.mmd
 ├── deliverables
 │   └── RiziEvents-Technical-Documentation.docx
-└── scripts
-    └── generate_docx.py
 ```
 
 ## Core User Flows
