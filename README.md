@@ -7,7 +7,7 @@ RiziEvents is a lightweight event publishing and guest registration platform bui
 | Name | GitHub | Role |
 | --- | --- | --- |
 | Tariq Rashid | [@TariqRash](https://github.com/TariqRash) | Project lead, architecture and API design |
-| Ilyas | [@illo888](https://github.com/illo888) | Database design and backend services |
+| Shaden Almansour | [@illo888](https://github.com/illo888) | Database design and backend services |
 | Oways | [@oways-work](https://github.com/oways-work) | Diagrams, sequence flows, and QA plan |
 | Nawal Samer | [@Nawalsamer04](https://github.com/Nawalsamer04) | Technical documentation and deliverables |
 

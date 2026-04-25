@@ -1,0 +1,17 @@
+sequenceDiagram
+    actor Guest
+    participant UI as Public Event Page
+    participant API as GuestService
+    participant DB as Supabase Postgres
+
+    Guest->>UI: Open /e/{slug}
+    UI->>API: GET /api/public/events/{slug}
+    API->>DB: Read published event by slug
+    DB-->>API: Event details
+    API-->>UI: Event page payload
+    Guest->>UI: Submit registration form
+    UI->>API: POST /api/guests/register
+    API->>DB: Validate event and create guest
+    DB-->>API: Guest record created
+    API-->>UI: Registration success response
+    UI-->>Guest: Confirmation shown
