@@ -1,0 +1,20 @@
+flowchart LR
+    Guest["Guest User"] --> Browser["Web Browser"]
+    Organizer["Organizer"] --> Browser
+
+    Browser --> Vercel["Vercel / Next.js Web App"]
+    Vercel --> Auth["Supabase Auth"]
+    Vercel --> DB["Supabase Postgres"]
+    Vercel --> Storage["Supabase Storage"]
+    Vercel --> Maps["Google Maps API and Places SDK"]
+
+    Auth --> DB
+    DB --> RLS["Row Level Security Policies"]
+
+    subgraph Environments
+      Prod["Production: rizi.app"]
+      Stage["Staging: staging.rizi.app"]
+    end
+
+    Prod -. deploy .-> Vercel
+    Stage -. validate .-> Vercel

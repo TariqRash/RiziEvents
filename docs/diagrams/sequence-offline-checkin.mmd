@@ -1,0 +1,17 @@
+sequenceDiagram
+    actor Organizer
+    participant UI as Check-in Screen
+    participant API as CheckInService
+    participant DB as Supabase Postgres
+
+    Organizer->>UI: Open event guest list or check-in screen
+    UI->>API: GET /api/events/{eventId}/guests
+    API->>DB: Fetch registered guests
+    DB-->>API: Guest list
+    API-->>UI: Guest list response
+    Organizer->>UI: Select guest and confirm check-in
+    UI->>API: POST /api/guests/{guestId}/checkin
+    API->>DB: Update guest status and checked_in_at
+    DB-->>API: Updated guest
+    API-->>UI: Check-in success response
+    UI-->>Organizer: Attendance updated

@@ -1,1 +1,94 @@
 # RiziEvents
+
+RiziEvents is a reduced MVP for the Holberton phase-three technical documentation review. This repository intentionally reflects the simplified product baseline, not the larger experimental codebase used earlier in development.
+
+The MVP positions Rizi as a lightweight event publishing and guest registration platform built for a small student team. Organizers can create and publish an event, guests can open a public event page under `/e/[slug]`, register, and be checked in manually on-site.
+
+## URLs
+
+- Production: [https://rizi.app](https://rizi.app)
+- Production redirect target observed on April 25, 2026: [https://www.rizi.app](https://www.rizi.app)
+- Staging target for team validation: [https://staging.rizi.app](https://staging.rizi.app)
+- Public event route model: `https://rizi.app/e/[slug]`
+
+## MVP Scope
+
+### In scope
+
+- Organizer sign up and sign in
+- Event creation and publishing
+- Public event landing page
+- Guest registration
+- Guest list management
+- Offline/manual check-in
+- Google Maps API and Places SDK for venue selection and directions
+
+### Out of scope for the Holberton MVP
+
+- Online payment gateways
+- Premium plans and monetization
+- Custom domains and event subdomains
+- White-labeling
+- Public developer API
+- Advanced analytics
+- Modules marketplace
+- Large-team administration features
+- AI-assisted content generation in the formal project scope
+
+## Architecture Summary
+
+- Frontend: Next.js deployed on Vercel
+- Backend platform: Supabase Auth, Postgres, Storage, and Row Level Security
+- External integration: Google Maps API and Places SDK
+- Environments: Production and staging
+
+## Repository Layout
+
+```text
+.
+├── README.md
+├── docs
+│   ├── technical-documentation.md
+│   ├── api-spec.md
+│   ├── scm-qa-plan.md
+│   ├── technical-justifications.md
+│   └── diagrams
+│       ├── system-architecture.mmd
+│       ├── database-er.mmd
+│       ├── sequence-create-publish.mmd
+│       ├── sequence-guest-registration.mmd
+│       └── sequence-offline-checkin.mmd
+├── deliverables
+│   └── RiziEvents-Technical-Documentation.docx
+└── scripts
+    └── generate_docx.py
+```
+
+## Core User Flows
+
+1. Organizer creates an account and signs in.
+2. Organizer creates an event with title, dates, venue, capacity, and branding.
+3. Organizer publishes the event.
+4. A guest opens `https://rizi.app/e/[slug]`.
+5. The guest submits a registration form.
+6. The organizer views the guest list and checks in attendees offline at the venue.
+
+## Simplified Domain Model
+
+The reduced MVP documentation is based on these core entities:
+
+- `users`
+- `events`
+- `guests`
+- `agenda_items`
+- `speakers`
+
+All guests are treated as free-tier users in this MVP. No billing or payment logic is part of the documented baseline.
+
+## Deliverables
+
+- Main technical document: [docs/technical-documentation.md](docs/technical-documentation.md)
+- API specification: [docs/api-spec.md](docs/api-spec.md)
+- SCM and QA plan: [docs/scm-qa-plan.md](docs/scm-qa-plan.md)
+- Technical justifications: [docs/technical-justifications.md](docs/technical-justifications.md)
+- Submission file: [deliverables/RiziEvents-Technical-Documentation.docx](deliverables/RiziEvents-Technical-Documentation.docx)

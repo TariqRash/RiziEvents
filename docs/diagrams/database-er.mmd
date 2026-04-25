@@ -1,0 +1,64 @@
+erDiagram
+    USERS ||--o{ EVENTS : creates
+    EVENTS ||--o{ GUESTS : registers
+    EVENTS ||--o{ AGENDA_ITEMS : includes
+    EVENTS ||--o{ SPEAKERS : features
+    SPEAKERS o|--o{ AGENDA_ITEMS : may_present
+
+    USERS {
+        uuid id PK
+        string email
+        string name
+        string role
+        datetime created_at
+    }
+
+    EVENTS {
+        uuid id PK
+        uuid organizer_id FK
+        string slug
+        string title
+        string status
+        datetime start_date
+        datetime end_date
+        string venue_name
+        string venue_address
+        string city
+        string place_id
+        float latitude
+        float longitude
+        int capacity
+        json brand_config
+        datetime created_at
+    }
+
+    GUESTS {
+        uuid id PK
+        uuid event_id FK
+        string full_name
+        string email
+        string phone
+        string tier
+        string status
+        datetime checked_in_at
+        datetime created_at
+    }
+
+    AGENDA_ITEMS {
+        uuid id PK
+        uuid event_id FK
+        uuid speaker_id FK
+        string title
+        string item_type
+        datetime start_time
+        datetime end_time
+        string location_name
+    }
+
+    SPEAKERS {
+        uuid id PK
+        uuid event_id FK
+        string full_name
+        string job_title
+        string bio
+    }
