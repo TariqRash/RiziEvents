@@ -95,6 +95,8 @@ The high-level architecture is documented in `docs/diagrams/system-architecture.
 
 ## 6. Components and Classes
 
+The class and component relationships are documented in `docs/diagrams/class-diagram.mmd`.
+
 ### Frontend modules
 
 - `Auth UI`

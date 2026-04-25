@@ -54,6 +54,7 @@ The MVP positions Rizi as a lightweight event publishing and guest registration 
 │   ├── technical-justifications.md
 │   └── diagrams
 │       ├── system-architecture.mmd
+│       ├── class-diagram.mmd
 │       ├── database-er.mmd
 │       ├── sequence-create-publish.mmd
 │       ├── sequence-guest-registration.mmd

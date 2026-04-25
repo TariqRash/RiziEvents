@@ -103,6 +103,7 @@ def main() -> None:
 
     document.add_page_break()
     add_diagram_section(document, "System Architecture Diagram", ROOT / "docs" / "diagrams" / "system-architecture.mmd")
+    add_diagram_section(document, "Class and Component Diagram", ROOT / "docs" / "diagrams" / "class-diagram.mmd")
     add_diagram_section(document, "Database ER Diagram", ROOT / "docs" / "diagrams" / "database-er.mmd")
     add_diagram_section(document, "Sequence Diagram: Create and Publish Event", ROOT / "docs" / "diagrams" / "sequence-create-publish.mmd")
     add_diagram_section(document, "Sequence Diagram: Guest Registration", ROOT / "docs" / "diagrams" / "sequence-guest-registration.mmd")
