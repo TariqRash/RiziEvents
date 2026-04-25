@@ -72,7 +72,7 @@
 
 ### Environments
 
-- Production: `https://rizi.app`
+- Production: `https://www.rizi.app`
 - Staging: `https://staging.rizi.app`
 
 ### Release checks

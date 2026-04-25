@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import re
+import urllib.request
 from pathlib import Path
 
 from docx import Document
@@ -10,6 +12,7 @@ from docx.shared import Inches, Pt
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "deliverables" / "RiziEvents-Technical-Documentation.docx"
+TMP_DIR = ROOT / "tmp" / "docs" / "mermaid"
 
 
 def ensure_styles(document: Document) -> None:
@@ -28,9 +31,31 @@ def ensure_styles(document: Document) -> None:
         pf.space_after = Pt(3)
 
 
+def render_mermaid_png(source: str) -> Path:
+    TMP_DIR.mkdir(parents=True, exist_ok=True)
+    name = hashlib.sha256(source.encode("utf-8")).hexdigest()[:16]
+    output_path = TMP_DIR / f"{name}.png"
+    if output_path.exists():
+        return output_path
+
+    req = urllib.request.Request(
+        "https://kroki.io/mermaid/png",
+        data=source.encode("utf-8"),
+        headers={
+            "Content-Type": "text/plain",
+            "Accept": "image/png",
+            "User-Agent": "Mozilla/5.0",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=60) as response:
+        output_path.write_bytes(response.read())
+    return output_path
+
+
 def add_markdown(document: Document, path: Path) -> None:
     in_code = False
     code_lang = ""
+    mermaid_lines: list[str] = []
 
     for raw_line in path.read_text(encoding="utf-8").splitlines():
         line = raw_line.rstrip()
@@ -39,15 +64,24 @@ def add_markdown(document: Document, path: Path) -> None:
             if not in_code:
                 in_code = True
                 code_lang = line[3:].strip()
-                if code_lang:
+                mermaid_lines = []
+                if code_lang and code_lang != "mermaid":
                     document.add_paragraph(code_lang.upper(), style="Intense Quote")
             else:
+                if code_lang == "mermaid":
+                    png_path = render_mermaid_png("\n".join(mermaid_lines).strip() + "\n")
+                    document.add_picture(str(png_path), width=Inches(6.5))
+                    document.add_paragraph("")
                 in_code = False
                 code_lang = ""
+                mermaid_lines = []
             continue
 
         if in_code:
-            document.add_paragraph(line or " ", style="CodeBlock")
+            if code_lang == "mermaid":
+                mermaid_lines.append(line)
+            else:
+                document.add_paragraph(line or " ", style="CodeBlock")
             continue
 
         if not line.strip():
@@ -71,12 +105,6 @@ def add_markdown(document: Document, path: Path) -> None:
         document.add_paragraph(line)
 
 
-def add_diagram_section(document: Document, title: str, path: Path) -> None:
-    document.add_heading(title, level=2)
-    document.add_paragraph("Mermaid source:")
-    document.add_paragraph(path.read_text(encoding="utf-8").strip(), style="CodeBlock")
-
-
 def main() -> None:
     document = Document()
     ensure_styles(document)
@@ -93,9 +121,6 @@ def main() -> None:
     add_markdown(document, ROOT / "docs" / "technical-documentation.md")
 
     document.add_page_break()
-    add_markdown(document, ROOT / "docs" / "diagrams.md")
-
-    document.add_page_break()
     add_markdown(document, ROOT / "docs" / "api-spec.md")
 
     document.add_page_break()
@@ -103,14 +128,6 @@ def main() -> None:
 
     document.add_page_break()
     add_markdown(document, ROOT / "docs" / "technical-justifications.md")
-
-    document.add_page_break()
-    add_diagram_section(document, "System Architecture Diagram", ROOT / "docs" / "diagrams" / "system-architecture.mmd")
-    add_diagram_section(document, "Class and Component Diagram", ROOT / "docs" / "diagrams" / "class-diagram.mmd")
-    add_diagram_section(document, "Database ER Diagram", ROOT / "docs" / "diagrams" / "database-er.mmd")
-    add_diagram_section(document, "Sequence Diagram: Create and Publish Event", ROOT / "docs" / "diagrams" / "sequence-create-publish.mmd")
-    add_diagram_section(document, "Sequence Diagram: Guest Registration", ROOT / "docs" / "diagrams" / "sequence-guest-registration.mmd")
-    add_diagram_section(document, "Sequence Diagram: Offline Check-in", ROOT / "docs" / "diagrams" / "sequence-offline-checkin.mmd")
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     document.save(OUTPUT)

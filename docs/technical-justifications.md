@@ -59,7 +59,7 @@ The original product direction explored more advanced platform ideas, but the re
 
 ## Path-Based Event URLs
 
-The documentation standardizes on `https://rizi.app/e/[slug]` instead of custom domains or subdomains.
+The documentation standardizes on `https://www.rizi.app/e/[slug]` instead of custom domains or subdomains.
 
 ### Reasons
 

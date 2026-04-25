@@ -8,9 +8,10 @@ The platform allows an organizer to sign in, create an event, publish it under a
 
 ### Official URLs
 
-- Main application: `https://rizi.app`
+- Canonical production URL: `https://www.rizi.app`
+- Production apex redirect: `https://rizi.app`
 - Staging environment: `https://staging.rizi.app`
-- Public event page pattern: `https://rizi.app/e/[slug]`
+- Public event page pattern: `https://www.rizi.app/e/[slug]`
 
 ## 2. MVP Scope
 
@@ -111,7 +112,7 @@ flowchart LR
     DB --> RLS["Row Level Security Policies"]
 
     subgraph Environments
-      Prod["Production: rizi.app"]
+      Prod["Production: www.rizi.app"]
       Stage["Staging: staging.rizi.app"]
     end
 
@@ -130,7 +131,7 @@ The class and component relationships are documented in `docs/diagrams/class-dia
 - `Event Management UI`
   - Handles event creation, editing, publishing, and guest list access.
 - `Public Event Page`
-  - Displays event details, agenda, speakers, and venue information at `/e/[slug]`.
+  - Displays event details, agenda, speakers, and venue information at `https://www.rizi.app/e/[slug]`.
 - `Guest Registration UI`
   - Collects guest details and submits registration requests.
 - `Guest List UI`
@@ -311,11 +312,11 @@ The ER diagram is documented in `docs/diagrams/database-er.mmd`.
 
 ### Reduced schema decisions
 
-- Public event routing is slug-based under `/e/[slug]`.
+- Public event routing is slug-based under `https://www.rizi.app/e/[slug]`.
 - Payment-related tables are excluded from the MVP design.
 - Subscription or premium-plan tables are excluded from the MVP design.
 - Venue location data may include `place_id`, `address`, `latitude`, and `longitude`.
-- Guests are treated as free-tier participants by default.
+- The platform uses a single free MVP tier and excludes paid-plan enforcement.
 
 ### Mermaid: Database ER Diagram
 

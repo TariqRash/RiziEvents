@@ -6,10 +6,10 @@ The MVP positions Rizi as a lightweight event publishing and guest registration 
 
 ## URLs
 
-- Production: [https://rizi.app](https://rizi.app)
-- Production redirect target observed on April 25, 2026: [https://www.rizi.app](https://www.rizi.app)
+- Canonical production URL: [https://www.rizi.app](https://www.rizi.app)
+- Production apex redirect: [https://rizi.app](https://rizi.app)
 - Staging target for team validation: [https://staging.rizi.app](https://staging.rizi.app)
-- Public event route model: `https://rizi.app/e/[slug]`
+- Public event route model: `https://www.rizi.app/e/[slug]`
 
 ## MVP Scope
 
@@ -57,6 +57,7 @@ The MVP positions Rizi as a lightweight event publishing and guest registration 
 │       ├── system-architecture.mmd
 │       ├── class-diagram.mmd
 │       ├── database-er.mmd
+│       ├── sequence-organizer-auth.mmd
 │       ├── sequence-create-publish.mmd
 │       ├── sequence-guest-registration.mmd
 │       └── sequence-offline-checkin.mmd
@@ -71,7 +72,7 @@ The MVP positions Rizi as a lightweight event publishing and guest registration 
 1. Organizer creates an account and signs in.
 2. Organizer creates an event with title, dates, venue, capacity, and branding.
 3. Organizer publishes the event.
-4. A guest opens `https://rizi.app/e/[slug]`.
+4. A guest opens `https://www.rizi.app/e/[slug]`.
 5. The guest submits a registration form.
 6. The organizer views the guest list and checks in attendees offline at the venue.
 
@@ -85,7 +86,7 @@ The reduced MVP documentation is based on these core entities:
 - `agenda_items`
 - `speakers`
 
-All guests are treated as free-tier users in this MVP. No billing or payment logic is part of the documented baseline.
+All accounts are treated under a single free MVP tier in this phase. No billing or payment logic is part of the documented baseline.
 
 ## Deliverables
 

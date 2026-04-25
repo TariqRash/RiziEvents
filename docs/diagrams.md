@@ -34,7 +34,7 @@ flowchart LR
     DB --> RLS["Row Level Security Policies"]
 
     subgraph Environments
-      Prod["Production: rizi.app"]
+      Prod["Production: www.rizi.app"]
       Stage["Staging: staging.rizi.app"]
     end
 
