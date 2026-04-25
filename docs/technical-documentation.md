@@ -95,8 +95,11 @@ This repository focuses on the technical documentation and architecture that ali
 
 ## 5. System Architecture
 
-The high-level architecture is documented in `docs/diagrams/system-architecture.mmd`.
-GitHub-rendered diagrams are also collected in `docs/diagrams.md`.
+The high-level architecture is documented in the GitHub repository:
+[system-architecture.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/system-architecture.mmd)
+
+GitHub-rendered diagrams are also collected here:
+[docs/diagrams.md](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams.md)
 
 ### Architecture overview
 
@@ -135,7 +138,8 @@ flowchart LR
 
 ## 6. Components and Classes
 
-The class and component relationships are documented in `docs/diagrams/class-diagram.mmd`.
+The class and component relationships are documented in the GitHub repository:
+[class-diagram.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/class-diagram.mmd)
 
 ### Frontend modules
 
@@ -308,7 +312,8 @@ classDiagram
 
 ## 7. Database Design
 
-The ER diagram is documented in `docs/diagrams/database-er.mmd`.
+The ER diagram is documented in the GitHub repository:
+[database-er.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/database-er.mmd)
 
 ### Core tables
 
@@ -402,12 +407,12 @@ erDiagram
 
 ## 8. Sequence Diagrams
 
-The key interaction diagrams are stored in:
+The key interaction diagrams are stored in the GitHub repository:
 
-- `docs/diagrams/sequence-organizer-auth.mmd`
-- `docs/diagrams/sequence-create-publish.mmd`
-- `docs/diagrams/sequence-guest-registration.mmd`
-- `docs/diagrams/sequence-offline-checkin.mmd`
+- [sequence-organizer-auth.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/sequence-organizer-auth.mmd)
+- [sequence-create-publish.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/sequence-create-publish.mmd)
+- [sequence-guest-registration.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/sequence-guest-registration.mmd)
+- [sequence-offline-checkin.mmd](https://github.com/TariqRash/RiziEvents/blob/docs/reduced-mvp-phase3/docs/diagrams/sequence-offline-checkin.mmd)
 
 ### Covered scenarios
 
