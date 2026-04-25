@@ -78,6 +78,19 @@ Mockups and user-story drafts were completed earlier by the team and are reused 
 - Guest list
 - Offline/manual check-in screen
 
+### Organizer Mockups
+
+The organizer journey mockup currently covers the organizer-side flow for sign in, dashboard access, event creation and editing, publication readiness, and organizer event management.
+
+Direct Figma embed link:
+`https://embed.figma.com/design/RmJ2tLT6Nm2U7oc9pciS2j/Rizi-Final-Mockup?node-id=15-259&embed-host=share`
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/RmJ2tLT6Nm2U7oc9pciS2j/Rizi-Final-Mockup?node-id=15-259&embed-host=share" allowfullscreen></iframe>
+
+### Visitor Mockups
+
+Visitor-side mockups will be added later as a separate visual reference for the guest journey.
+
 This repository focuses on the technical documentation and architecture that align with those mockups.
 
 ## 5. System Architecture

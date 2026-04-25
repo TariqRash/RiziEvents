@@ -88,6 +88,11 @@ def add_markdown(document: Document, path: Path) -> None:
             document.add_paragraph("")
             continue
 
+        iframe = re.match(r'^<iframe\b[^>]*src="([^"]+)"[^>]*></iframe>$', line)
+        if iframe:
+            document.add_paragraph(f"Embedded mockup reference: {iframe.group(1)}")
+            continue
+
         heading = re.match(r"^(#{1,6})\s+(.*)$", line)
         if heading:
             level = min(len(heading.group(1)), 4)
