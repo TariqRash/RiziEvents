@@ -82,6 +82,7 @@ This repository focuses on the technical documentation and architecture that ali
 ## 5. System Architecture
 
 The high-level architecture is documented in `docs/diagrams/system-architecture.mmd`.
+GitHub-rendered diagrams are also collected in `docs/diagrams.md`.
 
 ### Architecture overview
 
@@ -389,34 +390,75 @@ erDiagram
 
 The key interaction diagrams are stored in:
 
+- `docs/diagrams/sequence-organizer-auth.mmd`
 - `docs/diagrams/sequence-create-publish.mmd`
 - `docs/diagrams/sequence-guest-registration.mmd`
 - `docs/diagrams/sequence-offline-checkin.mmd`
 
 ### Covered scenarios
 
+- Organizer registration and sign in.
 - Organizer creates and publishes an event.
 - Guest opens the event page and registers.
 - Organizer performs offline/manual check-in.
+
+### Sequence coverage note
+
+Together, the sequence diagrams cover the full MVP flow from organizer authentication to event publishing, guest registration, guest list retrieval, and offline check-in. The create/publish and guest-registration sequences also cover the Should Have stories around agenda, speakers, and venue directions at the level expected for this MVP.
+
+### Mermaid: Organizer Authentication
+
+```mermaid
+sequenceDiagram
+    actor Organizer
+    participant UI as Auth UI
+    participant API as AuthService
+    participant Auth as Supabase Auth
+    participant DB as Supabase Postgres
+
+    Organizer->>UI: Open sign up or sign in screen
+    alt New organizer registration
+        Organizer->>UI: Submit register form
+        UI->>API: POST /api/auth/register
+        API->>Auth: Create auth account
+        Auth->>DB: Create organizer profile record
+        DB-->>Auth: Profile saved
+        Auth-->>API: Account created
+        API-->>UI: Registration success
+    else Existing organizer login
+        Organizer->>UI: Submit login form
+        UI->>API: POST /api/auth/login
+        API->>Auth: Validate credentials
+        Auth-->>API: Session returned
+        API-->>UI: Authenticated session
+    end
+```
 
 ### Mermaid: Create and Publish Event
 
 ```mermaid
 sequenceDiagram
     actor Organizer
-    participant UI as Next.js Web App
-    participant Auth as Supabase Auth
+    participant UI as Event Management UI
     participant API as EventService
+    participant Maps as VenueLocationService
     participant DB as Supabase Postgres
 
-    Organizer->>UI: Sign in with email and password
-    UI->>Auth: Authenticate organizer
-    Auth-->>UI: Session returned
-    Organizer->>UI: Submit create event form
+    Organizer->>UI: Open create event form
+    Organizer->>UI: Enter title, dates, capacity, branding
+    Organizer->>UI: Search venue
+    UI->>Maps: Resolve place data from Google Maps
+    Maps-->>UI: place_id, address, latitude, longitude
+    Organizer->>UI: Save draft
     UI->>API: POST /api/events
-    API->>DB: Insert draft event and generated slug
+    API->>DB: Insert draft event with slug and venue data
     DB-->>API: Event created
     API-->>UI: Draft event response
+    Organizer->>UI: Add optional agenda and speakers
+    UI->>API: PATCH /api/events/{eventId}
+    API->>DB: Update event content
+    DB-->>API: Event updated
+    API-->>UI: Updated event response
     Organizer->>UI: Publish event
     UI->>API: POST /api/events/{eventId}/publish
     API->>DB: Update event status to published
@@ -431,14 +473,17 @@ sequenceDiagram
     actor Guest
     participant UI as Public Event Page
     participant API as GuestService
+    participant Maps as VenueLocationService
     participant DB as Supabase Postgres
 
     Guest->>UI: Open /e/{slug}
     UI->>API: GET /api/public/events/{slug}
     API->>DB: Read published event by slug
-    DB-->>API: Event details
+    DB-->>API: Event details, agenda, speakers, venue
     API-->>UI: Event page payload
-    Guest->>UI: Submit registration form
+    UI->>Maps: Build directions link from venue data
+    Maps-->>UI: Directions URL
+    Guest->>UI: Review details and submit registration form
     UI->>API: POST /api/guests/register
     API->>DB: Validate event and create guest
     DB-->>API: Guest record created
@@ -451,16 +496,17 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     actor Organizer
-    participant UI as Check-in Screen
+    participant UI as Guest List and Check-in UI
+    participant GuestAPI as GuestService
     participant API as CheckInService
     participant DB as Supabase Postgres
 
-    Organizer->>UI: Open event guest list or check-in screen
-    UI->>API: GET /api/events/{eventId}/guests
-    API->>DB: Fetch registered guests
-    DB-->>API: Guest list
-    API-->>UI: Guest list response
-    Organizer->>UI: Select guest and confirm check-in
+    Organizer->>UI: Open guest list
+    UI->>GuestAPI: GET /api/events/{eventId}/guests
+    GuestAPI->>DB: Fetch registered guests
+    DB-->>GuestAPI: Guest list
+    GuestAPI-->>UI: Guest list response
+    Organizer->>UI: Search guest and confirm check-in
     UI->>API: POST /api/guests/{guestId}/checkin
     API->>DB: Update guest status and checked_in_at
     DB-->>API: Updated guest

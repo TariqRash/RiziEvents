@@ -93,6 +93,9 @@ def main() -> None:
     add_markdown(document, ROOT / "docs" / "technical-documentation.md")
 
     document.add_page_break()
+    add_markdown(document, ROOT / "docs" / "diagrams.md")
+
+    document.add_page_break()
     add_markdown(document, ROOT / "docs" / "api-spec.md")
 
     document.add_page_break()

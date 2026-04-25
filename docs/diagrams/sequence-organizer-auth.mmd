@@ -1,0 +1,23 @@
+sequenceDiagram
+    actor Organizer
+    participant UI as Auth UI
+    participant API as AuthService
+    participant Auth as Supabase Auth
+    participant DB as Supabase Postgres
+
+    Organizer->>UI: Open sign up or sign in screen
+    alt New organizer registration
+        Organizer->>UI: Submit register form
+        UI->>API: POST /api/auth/register
+        API->>Auth: Create auth account
+        Auth->>DB: Create organizer profile record
+        DB-->>Auth: Profile saved
+        Auth-->>API: Account created
+        API-->>UI: Registration success
+    else Existing organizer login
+        Organizer->>UI: Submit login form
+        UI->>API: POST /api/auth/login
+        API->>Auth: Validate credentials
+        Auth-->>API: Session returned
+        API-->>UI: Authenticated session
+    end

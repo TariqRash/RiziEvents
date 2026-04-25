@@ -49,6 +49,7 @@ The MVP positions Rizi as a lightweight event publishing and guest registration 
 ├── README.md
 ├── docs
 │   ├── technical-documentation.md
+│   ├── diagrams.md
 │   ├── api-spec.md
 │   ├── scm-qa-plan.md
 │   ├── technical-justifications.md
@@ -89,6 +90,7 @@ All guests are treated as free-tier users in this MVP. No billing or payment log
 ## Deliverables
 
 - Main technical document: [docs/technical-documentation.md](docs/technical-documentation.md)
+- Combined diagrams page: [docs/diagrams.md](docs/diagrams.md)
 - API specification: [docs/api-spec.md](docs/api-spec.md)
 - SCM and QA plan: [docs/scm-qa-plan.md](docs/scm-qa-plan.md)
 - Technical justifications: [docs/technical-justifications.md](docs/technical-justifications.md)
